@@ -63,3 +63,11 @@ jobs:
             }
             console.log("전부 있음");
           '
+
+      # 규칙 91개가 전부 통과해도 app.js 의 오타 하나면 페이지가 빈 화면이 된다.
+      # 규칙은 맞는데 아무도 그것을 볼 수 없는 상태다. 파일을 읽어서는 안 잡힌다.
+      - name: 화면 연기 테스트 (예시 세 문서를 실제로 지나간다)
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          node test/smoke.browser.js
