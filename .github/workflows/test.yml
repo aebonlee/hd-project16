@@ -1,0 +1,65 @@
+# 테스트 — main 브랜치 보호의 "필수 상태 체크"로 걸 수 있게 만든 것.
+#
+# main 을 보호하려면 요구할 체크가 하나는 있어야 한다.
+# 이 워크플로의 `test` 잡이 그 체크다.
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # 의존성이 없다. 파일을 열면 그대로 도는 것이 이 저장소의 전제이므로
+      # npm install 단계 자체를 두지 않는다.
+      - name: 단위 테스트 (숫자 읽기 · 줄 맞히기 · 검산)
+        run: node test/logic.test.js
+
+      # 이 저장소는 폐쇄망 전제라 라이브러리를 전부 동봉한다(15MB).
+      # 그중 하나가 빠지면 단위 테스트는 전부 통과한다 — 순수 함수는 lib 를 안 쓴다.
+      # 대신 브라우저에서 스캔본을 열 때 조용히 실패한다. 그래서 따로 센다.
+      - name: 동봉 라이브러리가 다 있는가
+        run: |
+          node -e '
+            var fs = require("fs");
+            var want = new Set(), miss = [];
+
+            // ① HTML 이 직접 부르는 것
+            ["index.html", "guide.html"].forEach(function (f) {
+              (fs.readFileSync(f, "utf8").match(/(?:src|href)="(?!https?:|#|mailto:)[^"]+"/g) || [])
+                .forEach(function (m) {
+                  var p = m.slice(m.indexOf("\"") + 1, -1).split("#")[0];
+                  if (p) want.add(p);
+                });
+            });
+
+            // ② js/read.js 가 libUrl() 로 늦게 부르는 것 —
+            //    HTML 에 안 적혀 있어 눈으로는 안 보인다. 여기가 진짜 위험한 자리다.
+            var re = /libUrl\(\s*(["\x27])([^"\x27]*)\1/g, m;
+            var src = fs.readFileSync("js/read.js", "utf8");
+            while ((m = re.exec(src)) !== null) want.add("lib/" + m[2]);
+
+            [...want].sort().forEach(function (p) {
+              if (!fs.existsSync(p)) miss.push(p);
+            });
+
+            console.log("확인한 경로 " + want.size + "개");
+            if (miss.length) {
+              console.error("없는 파일:\n  " + miss.join("\n  "));
+              process.exit(1);
+            }
+            console.log("전부 있음");
+          '
