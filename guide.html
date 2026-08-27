@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>사용법 | 외자부품 Invoice 엑셀 변환</title>
+<meta name="description" content="Invoice PDF를 엑셀로 바꾸는 순서와, 잘못 읽은 값을 찾아내는 방법. 실제로 쓰는 차례대로 적었습니다.">
+<link rel="stylesheet" href="css/style.css">
+<!-- === HD:META:BEGIN (자동 생성 — scripts 로 다시 굽습니다) === -->
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="canonical" href="https://aebonlee.github.io/hd-project16/guide.html">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="HD 생성형 AI 업무자동화 전문가과정">
+<meta property="og:url" content="https://aebonlee.github.io/hd-project16/guide.html">
+<meta property="og:title" content="Invoice 엑셀 변환 — 사용법 — HD 생성형 AI 업무자동화 전문가과정">
+<meta property="og:description" content="파일 넣기부터 엑셀 내보내기까지 실제로 쓰는 순서대로. 잘못 읽은 값을 찾아내는 방법도 함께.">
+<meta property="og:image" content="https://aebonlee.github.io/hd-project16/og-guide.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Invoice 엑셀 변환 — 사용법 — HD 생성형 AI 업무자동화 전문가과정">
+<meta name="twitter:description" content="파일 넣기부터 엑셀 내보내기까지 실제로 쓰는 순서대로. 잘못 읽은 값을 찾아내는 방법도 함께.">
+<meta name="twitter:image" content="https://aebonlee.github.io/hd-project16/og-guide.png">
+<!-- === HD:META:END === -->
+</head>
+<body>
+
+<nav class="topnav"><div class="topnav-inner">
+  <a class="topnav-brand" href="index.html">Foreign Parts DB<small>외자부품 Invoice 변환</small></a>
+  <ul class="topnav-links">
+    <li><a href="index.html">파일 넣기</a></li>
+    <li><a href="index.html#docs">읽은 문서</a></li>
+    <li><a href="index.html#table">검증·수정</a></li>
+    <li><a href="index.html#out">엑셀 내보내기</a></li>
+    <li><a href="guide.html" class="active">사용법</a></li>
+  </ul>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">HD 생성형 AI 업무자동화 전문가과정 · 기획 권도연</div>
+  <h1>사용법</h1>
+  <p>실제로 쓰는 순서대로 적었습니다. 처음이라면 <b>예시로 해 보기</b>를 먼저 눌러 보세요.</p>
+</div></header>
+
+<main><div class="wrap">
+
+<h2>1. 파일 넣기</h2>
+<p>Invoice 파일을 끌어다 놓거나 눌러서 고릅니다. <b>여러 공급사 것을 한 번에</b> 넣어도 됩니다.</p>
+<div class="tablewrap" style="max-height:none"><table>
+  <thead><tr><th>파일 종류</th><th>어떻게 읽나</th><th>정확도</th></tr></thead>
+  <tbody>
+  <tr><td>전자 PDF</td><td>글자를 그대로 꺼냅니다</td><td>높음</td></tr>
+  <tr><td>스캔본 PDF</td><td>그림으로 그린 뒤 문자인식</td><td><b style="color:var(--warn)">낮음 — 꼭 검산을 보세요</b></td></tr>
+  <tr><td>사진 (JPG·PNG)</td><td>문자인식</td><td><b style="color:var(--warn)">낮음</b></td></tr>
+  <tr><td>엑셀·CSV</td><td>표를 그대로 읽습니다</td><td>높음</td></tr>
+  </tbody></table></div>
+
+<p><b>전자 PDF인지 스캔본인지는 자동으로 판단합니다.</b>
+   글자가 거의 없으면 스캔본으로 보고 문자인식으로 넘어갑니다.
+   전자 PDF인데 글자가 깨져 나오면 <b>스캔본으로 강제</b>를 켜고 다시 넣어 보세요.</p>
+
+<div class="note">
+  <b>문자인식은 시간이 걸립니다.</b> 한 쪽에 10~30초쯤 걸리고, 진행 막대가 나옵니다.
+  여러 장을 한꺼번에 넣으면 오래 걸리니 급할 때는 몇 장씩 나눠 넣으세요.
+</div>
+
+<h2>2. 읽은 문서 확인</h2>
+<p>파일마다 카드가 하나씩 생깁니다. 여기서 <b>먼저 볼 것</b>은 세 가지입니다.</p>
+<ul style="margin:0 0 14px 20px">
+  <li><b>읽은 방식</b> — 파란 딱지는 전자 PDF, <b style="color:var(--warn)">주황 딱지는 문자인식</b>입니다.
+      주황이면 숫자가 틀릴 가능성이 훨씬 높습니다.</li>
+  <li><b>부품 건수와 합계</b> — 원본 Invoice의 Sub Total과 맞는지 보세요.
+      <b>여기가 다르면 부품이 빠졌거나 잘못 읽은 것입니다.</b> 가장 빠른 확인 방법입니다.</li>
+  <li><b>붉은 안내</b> — 계산이 맞지 않아 짐작해 넣은 줄, 부품으로 보지 않은 줄이 있으면 나옵니다.</li>
+</ul>
+
+<h2>3. 검증·수정 — 여기가 가장 중요합니다</h2>
+
+<div class="warn">
+  <b>자동으로 읽은 값을 안 보고 그대로 ERP에 올리지 마세요.</b>
+  손으로 칠 때는 한 건 틀리지만, 잘못 읽은 규칙은 <b>백 줄을 한꺼번에</b> 틀리게 만듭니다.
+  적어도 <b>합계</b>와 <b>붉은 줄</b>은 반드시 보셔야 합니다.
+</div>
+
+<p><b>표의 칸을 눌러 바로 고칠 수 있습니다.</b>
+   수량이나 단가를 고치면 금액이 자동으로 다시 계산됩니다.
+   금액을 직접 고치면 그 값을 그대로 두고 검산 결과만 바뀝니다
+   — 원본 금액이 맞고 단가 표기가 반올림된 경우가 있기 때문입니다.</p>
+
+<h3 style="font-size:16px;margin:22px 0 8px">붉은 줄은 왜 생기나</h3>
+<p><b>수량 × 단가 = 금액</b>이 맞지 않는 줄입니다. 대개 이 셋 중 하나입니다.</p>
+<ol style="margin:0 0 14px 20px">
+  <li><b>문자인식이 숫자를 잘못 읽었다</b> — 8을 3으로, 0을 O로 읽는 일이 흔합니다.
+      원본을 보고 고치세요.</li>
+  <li><b>열을 잘못 짚었다</b> — 할인율이나 중량 같은 다른 숫자를 단가로 본 경우입니다.</li>
+  <li><b>원본 Invoice가 원래 그렇다</b> — 할인이 붙었거나 단가를 반올림해 적은 경우.
+      이때는 고치지 말고 그대로 두세요. 엑셀에 “확인필요”로 남지만 값은 맞습니다.</li>
+</ol>
+
+<div class="note">
+  <b>“자리 순서로 짐작한 값입니다”</b>라고 뜬 줄은 계산이 안 맞아
+  <b>맨 뒤 = 금액 · 그 앞 = 단가 · 그 앞 = 수량</b>으로 넣은 것입니다.
+  버리지 않는 이유는 간단합니다 — 버리면 그 부품이 통째로 빠진 채 엑셀이 만들어지고
+  <b>아무도 모르기 때문</b>입니다. 빠진 것보다 표시된 것이 낫습니다.
+</div>
+
+<h3 style="font-size:16px;margin:22px 0 8px">날짜에 ⚠ 가 붙었다면</h3>
+<p><code>03/04/2026</code> 같은 날짜는 <b>3월 4일인지 4월 3일인지 알 수 없습니다.</b>
+   나라마다 순서가 달라서입니다. 이 도구는 단정하지 않고 표시만 합니다 —
+   공급사가 어느 나라인지 보고 표에서 직접 고치세요.</p>
+<p class="sub">숫자 하나가 12를 넘으면(예: <code>15/02</code>) 순서가 확실하므로 ⚠ 가 붙지 않습니다.</p>
+
+<h2>4. 엑셀 내보내기</h2>
+<p>부품 한 줄마다 헤더가 붙은 <b>평평한 표</b>로 만듭니다.</p>
+<div class="tablewrap"><table>
+  <thead><tr><th>열</th><th>뜻</th></tr></thead>
+  <tbody>
+  <tr><td class="mono">파일명 · 읽은방식</td><td>어느 파일에서, 어떤 엔진으로 읽었는지</td></tr>
+  <tr><td class="mono">InvoiceNo · 날짜 · Supplier · 통화 · PONo</td><td>헤더 — <b>줄마다 반복</b>됩니다</td></tr>
+  <tr><td class="mono">PartNo · Description · Qty · UnitPrice · Amount</td><td>부품 명세</td></tr>
+  <tr><td class="mono">검산</td><td>OK / 확인필요</td></tr>
+  <tr><td class="mono">비고</td><td>왜 확인이 필요한지</td></tr>
+  <tr><td class="mono">짐작</td><td>Y면 자리 순서로 짐작한 값</td></tr>
+  <tr><td class="mono">수정됨</td><td>Y면 사람이 화면에서 고친 값</td></tr>
+  <tr><td class="mono">읽은줄</td><td>원문 그대로 — <b>틀렸을 때 어디서 왔는지 봐야 합니다</b></td></tr>
+  </tbody></table></div>
+
+<p><b>헤더를 줄마다 반복하는 이유</b>는 ERP 업로드와 피벗 때문입니다.
+   헤더를 위쪽에 한 번만 두면 여러 Invoice를 합쳤을 때 어느 줄이 어느 것인지 알 수 없습니다.</p>
+
+<h2>공급사 양식이 달라도 되나</h2>
+<p>됩니다. <b>열 이름이나 순서를 보지 않기 때문</b>입니다.</p>
+<p>대신 <b>수량 × 단가 = 금액</b>이 성립하는 조합을 찾습니다.
+   그래서 <code>Qty | Unit Price | Amount</code> 순서든
+   <code>Preis | Menge | Betrag</code>(단가·수량·금액) 순서든 똑같이 찾아냅니다.</p>
+<p>유럽식 숫자 <code>1.234,56</code>도 이 방식으로 가려냅니다.
+   미국식으로 읽으면 1.234가 되어 <b>천 배가 틀리는데</b>, 화면에는 그냥 숫자로 보여
+   알아채기 어렵습니다. 두 방식으로 다 읽어 보고 <b>계산이 맞는 쪽</b>을 고릅니다.</p>
+
+<h2>파일이 밖으로 나가나요</h2>
+<div class="ok">
+  <b>나가지 않습니다.</b> 읽기·문자인식·엑셀 만들기가 전부 <b>이 브라우저 안에서</b> 끝납니다.
+  서버로 보내는 곳이 없고, 인터넷이 끊긴 사내망에서도 그대로 동작합니다.
+</div>
+
+<h2>안 되는 것</h2>
+<ul style="margin:0 0 14px 20px">
+  <li><b>손글씨</b> — 문자인식이 인쇄 글자만 읽습니다.</li>
+  <li><b>비뚤어진 스캔·흐린 복사본</b> — 정확도가 크게 떨어집니다. 다시 스캔하는 편이 빠릅니다.</li>
+  <li><b>표가 아닌 서술형 명세</b> — 한 줄에 수량·단가·금액이 함께 있어야 찾습니다.</li>
+  <li><b>여러 줄에 걸친 품명</b> — 둘째 줄이 따로 떨어져 나올 수 있습니다. 표에서 합쳐 주세요.</li>
+</ul>
+
+</div></main>
+
+<footer><div class="wrap">
+  <p>Foreign Parts DB — 외자부품 Invoice 엑셀 자동 변환.
+     모든 처리는 <b>이 브라우저 안에서</b> 끝납니다.</p>
+  <p class="sub">문의 dreamitbiz@naver.com · 010-2634-2426 · 카카오톡 aebon</p>
+</div></footer>
+
+</body>
+</html>

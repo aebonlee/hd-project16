@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>외자부품 Invoice 엑셀 변환 | Foreign Parts DB</title>
+<meta name="description" content="해외 공급사 Invoice(전자 PDF·스캔본)에서 부품 명세를 뽑아 ERP 업로드용 엑셀 한 장으로 만듭니다. 수량×단가=금액 검산으로 잘못 읽은 줄을 스스로 찾아냅니다.">
+<link rel="stylesheet" href="css/style.css">
+<!-- === HD:META:BEGIN (자동 생성 — scripts 로 다시 굽습니다) === -->
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="canonical" href="https://aebonlee.github.io/hd-project16/">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="HD 생성형 AI 업무자동화 전문가과정">
+<meta property="og:url" content="https://aebonlee.github.io/hd-project16/">
+<meta property="og:title" content="외자부품 Invoice 엑셀 변환 — HD 생성형 AI 업무자동화 전문가과정">
+<meta property="og:description" content="해외 공급사 Invoice(전자 PDF·스캔본)에서 부품 명세를 뽑아 ERP 업로드용 엑셀 한 장으로. 수량×단가=금액 검산으로 잘못 읽은 줄을 스스로 찾아냅니다.">
+<meta property="og:image" content="https://aebonlee.github.io/hd-project16/og-index.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="외자부품 Invoice 엑셀 변환 — HD 생성형 AI 업무자동화 전문가과정">
+<meta name="twitter:description" content="해외 공급사 Invoice(전자 PDF·스캔본)에서 부품 명세를 뽑아 ERP 업로드용 엑셀 한 장으로. 수량×단가=금액 검산으로 잘못 읽은 줄을 스스로 찾아냅니다.">
+<meta name="twitter:image" content="https://aebonlee.github.io/hd-project16/og-index.png">
+<!-- === HD:META:END === -->
+</head>
+<body>
+
+<nav class="topnav"><div class="topnav-inner">
+  <a class="topnav-brand" href="index.html">Foreign Parts DB<small>외자부품 Invoice 변환</small></a>
+  <ul class="topnav-links">
+    <li><a href="#intake" class="active">파일 넣기</a></li>
+    <li><a href="#docs">읽은 문서</a></li>
+    <li><a href="#table">검증·수정</a></li>
+    <li><a href="#out">엑셀 내보내기</a></li>
+    <li><a href="guide.html">사용법</a></li>
+  </ul>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">HD 생성형 AI 업무자동화 전문가과정 · 기획 권도연</div>
+  <h1>외자부품 Invoice 엑셀 자동 변환</h1>
+  <p>공급사마다 다른 Invoice(전자 PDF·스캔본)에서 부품 명세를 뽑아
+     ERP 업로드용 엑셀 한 장으로 합칩니다.
+     <b>수량 × 단가 = 금액</b>이 맞는지로 잘못 읽은 줄을 스스로 찾아냅니다.</p>
+</div></header>
+
+<main><div class="wrap">
+
+<section id="intake">
+  <label class="drop" id="drop" for="file">
+    <b>Invoice 파일을 끌어다 놓거나 눌러서 고릅니다</b>
+    <span>여러 공급사 것을 한 번에 넣어도 됩니다 · PDF(전자·스캔) · 이미지 · 엑셀 · CSV</span>
+  </label>
+  <input type="file" id="file" accept=".pdf,.png,.jpg,.jpeg,.tif,.tiff,.bmp,.webp,.csv,.xlsx,.xls" multiple>
+
+  <div class="btnrow">
+    <button class="btn" id="demo">예시로 해 보기</button>
+    <button class="btn" id="paste-toggle">글로 붙여넣기</button>
+    <label style="display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--sub)">
+      <input type="checkbox" id="force-ocr" style="width:16px;height:16px">
+      스캔본으로 강제 (전자 PDF 인데 글자가 깨질 때)</label>
+    <button class="btn" id="clear-all">전부 비우기</button>
+  </div>
+  <textarea id="paste" rows="8" hidden placeholder="Invoice 내용을 그대로 붙여넣으세요"></textarea>
+  <div class="btnrow" id="paste-row" hidden>
+    <button class="btn primary" id="paste-run">이 글 읽기</button>
+  </div>
+
+  <ul class="filelist" id="files"></ul>
+</section>
+
+<section id="docs">
+  <h2>읽은 문서 <span class="sub" id="doc-count"></span></h2>
+  <div id="doc-cards"></div>
+</section>
+
+<section id="table">
+  <h2>검증·수정 <span class="sub" id="row-count"></span></h2>
+  <div class="note" id="verify-note">
+    <b>칸을 눌러 바로 고칠 수 있습니다.</b>
+    수량이나 단가를 고치면 금액이 <b>자동으로 다시 계산</b>됩니다.
+    금액을 직접 고치면 그대로 두되 검산 결과가 바뀝니다.
+    <br><b style="color:var(--danger)">붉은 줄</b>은 수량 × 단가 = 금액이 맞지 않는 줄입니다 —
+    잘못 읽었을 가능성이 높으니 원본과 대조하세요.
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="btnrow">
+    <label style="display:flex;align-items:center;gap:7px;font-size:13.5px">
+      <input type="checkbox" id="only-bad" style="width:16px;height:16px">
+      확인이 필요한 줄만 보기</label>
+    <!-- 헤더 열은 문서 카드에 이미 있고 줄마다 똑같이 반복된다.
+         켜 두면 정작 봐야 할 검산 열이 화면 밖으로 밀린다. 기본은 접어 둔다. -->
+    <label style="display:flex;align-items:center;gap:7px;font-size:13.5px">
+      <input type="checkbox" id="show-header-cols" style="width:16px;height:16px">
+      헤더 열도 보기 <span class="sub">(파일·Invoice No·날짜·Supplier·통화)</span></label>
+    <button class="btn" id="fix-all">금액을 수량×단가로 일괄 정정</button>
+  </div>
+  <div class="tablewrap"><table id="rows">
+    <thead><tr>
+      <th></th><th>파일</th><th>Invoice No</th><th>날짜</th><th>Supplier</th><th>통화</th>
+      <th>Part No</th><th>Description</th><th>Qty</th><th>Unit Price</th><th>Amount</th>
+      <th>검산</th><th>읽은 줄</th>
+    </tr></thead>
+    <tbody></tbody></table></div>
+</section>
+
+<section id="out">
+  <h2>엑셀 내보내기</h2>
+  <p class="sub">부품 한 줄마다 헤더(Invoice No·날짜·Supplier·통화)가 붙은
+     <b>평평한 표</b>로 만듭니다. 그래야 ERP 업로드와 피벗 분석이 됩니다.</p>
+  <div class="btnrow">
+    <button class="btn primary" id="xlsx" disabled>엑셀로 내보내기 (Foreign_Parts_DB)</button>
+    <button class="btn" id="csv" disabled>CSV 로 내보내기</button>
+  </div>
+  <div class="warn" id="out-warn" hidden></div>
+</section>
+
+</div></main>
+
+<footer><div class="wrap">
+  <p>Foreign Parts DB — 외자부품 Invoice 엑셀 자동 변환.
+     모든 처리는 <b>이 브라우저 안에서</b> 끝납니다. 파일이 밖으로 나가지 않습니다.</p>
+  <p class="sub">문의 dreamitbiz@naver.com · 010-2634-2426 · 카카오톡 aebon</p>
+</div></footer>
+
+<script src="lib/xlsx.full.min.js"></script>
+<script src="lib/tesseract.min.js"></script>
+<script src="js/invoice.js"></script>
+<script src="js/read.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
