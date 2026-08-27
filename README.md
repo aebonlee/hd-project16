@@ -124,7 +124,8 @@ C사: 번호    | 품명        | 수량 | 단가       | 금액
 ## 개발
 
 ```sh
-node test/logic.test.js    # 91개
+node test/logic.test.js     # 91개
+node test/smoke.browser.js  # 브라우저에 실제로 띄운다 (29개)
 ```
 
 CI(`.github/workflows/test.yml`)에서 자동으로 돕니다. 여기에 **동봉 라이브러리가

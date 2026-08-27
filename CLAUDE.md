@@ -155,6 +155,7 @@ README 에 기획서 원문의 한 조각이 인용으로 남아 있다.
 
 - 빌드 없이 도는 순수 HTML/CSS/JS (GitHub Pages 배포) — 페이지 두 장(`index.html`·`guide.html`)
 - `test/logic.test.js` 91개
+- `test/smoke.browser.js` 29개 — 브라우저에 실제로 띄워 예시 세 문서를 지나간다
 - 라이브러리 동봉(`lib/`, 15MB) — 폐쇄망 전제
 - `README.md`, `docs/개발일지.md`
 
